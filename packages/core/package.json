@@ -17,10 +17,14 @@
 		"type": "git",
 		"url": "git+https://github.com/wang-man/web-architect.git"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"bugs": {
 		"url": "https://github.com/wang-man/web-architect/issues"
 	},
 	"dependencies": {
 		"classnames": "^2.3.1"
-	}
+	},
+	"gitHead": "862d149f2ec7ef657589a0fb00da471f157afc83"
 }

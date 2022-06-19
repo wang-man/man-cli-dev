@@ -3,6 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const inquirer = require('inquirer');
+const semver = require('semver');
 const fse = require('fs-extra');
 const Command = require('@man-cli-dev/command');
 const log = require('@man-cli-dev/log');
@@ -87,21 +88,38 @@ class InitCommand extends Command {
         message: '请输入项目名称',
         default: '',
         validate: function (v) {
-          return true
-        },
-        filter: function (v) {
-          return v
+          const done = this.async();
+          setTimeout(function () {
+            // 项目名称规则，可是是a,a1,ab,a-b,a_b,不能是a-,a_,ab-等
+            if (! /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][[a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(v)) {
+              done('项目名称不合格');
+              return;
+            }
+            done(null, true);
+          }, 0);
         }
       }, {
         type: 'input',
         name: 'projectVersion',
         message: '请输入项目版本号',
-        default: '',
+        default: '1.0.0',
         validate: function (v) {
-          return true
+          const done = this.async();
+          setTimeout(function () {
+            // 项目名称规则，可是是a,a1,ab,a-b,a_b,不能是a-,a_,ab-等
+            if (!semver.valid(v)) {
+              done('项目版本号不合格');
+              return;
+            }
+            done(null, true);
+          }, 0);
         },
         filter: function (v) {
-          return v
+          if (semver.valid(v)) {    //  注意semver.valid校验结果失败的时候返回null，filter不能返回null会出错，因此加上这里的判断。
+            return semver.valid(v);
+          } else {
+            return v;
+          }
         }
       }])
       console.log('info', info);

@@ -43,12 +43,13 @@ class Command {
     }
   }
 
+  // 扩展类中有该方法，则会覆盖这里的方法
   init() {
-    throw new Error('缺失init方法')
+    throw new Error('缺失init方法');
   }
-
+  // 扩展类中有该方法，则会覆盖这里的方法
   exec() {
-    throw new Error('缺失exec方法')
+    throw new Error('缺失exec方法');
   }
 }
 

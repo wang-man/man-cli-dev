@@ -26,7 +26,6 @@ class InitCommand extends Command {
   */
   async prepare() {
     const localPath = process.cwd();
-    console.log('localPath', localPath);
     if (!this.isDirEmpty(localPath)) {
       let ifContinue = false;
       // 先判断是否带有force参数，如果是force，则不用询问是否创建项目而是直接进行
@@ -42,7 +41,6 @@ class InitCommand extends Command {
         if (!ifContinue) return;
       }
 
-      console.log('ifContinue', ifContinue);
       if (ifContinue || this.force) {
         // 确认是否要清空目录。因为清空一个已经存在的目录可能存在重要文件丢失的风险，所以需要确认。
         const { confirmEmpty } = await inquirer.prompt({
@@ -60,10 +58,11 @@ class InitCommand extends Command {
         return confirmEmpty;
       }
     }
-    this.getProjectInfo();
+    return await this.getProjectInfo();
   }
 
   async getProjectInfo() {
+    let projectInfo = {};
     const { type } = await inquirer.prompt({
       type: 'list',
       name: 'type',
@@ -80,7 +79,6 @@ class InitCommand extends Command {
         }
       ]
     })
-    console.log('type', type);
     if (type === TYPE_PROJECT) {
       const info = await inquirer.prompt([{
         type: 'input',
@@ -122,9 +120,14 @@ class InitCommand extends Command {
           }
         }
       }])
-      console.log('info', info);
-    }
+      projectInfo = {
+        type,
+        ...info
+      }
+    } else if (type === TYPE_COMPONENT) {
 
+    }
+    return projectInfo;
   }
 
   isDirEmpty(localPath) {
@@ -139,13 +142,28 @@ class InitCommand extends Command {
    * 2.下载模板
    * 3.安装模板
   */
-  exec() {
+  async exec() {
     try {
       // 1.准备阶段
-      this.prepare();
+      const projectInfo = await this.prepare();
+      console.log('projectInfo', projectInfo);
+      if (projectInfo) {
+        // 2.下载模板
+        this.downloadTemplate();
+      }
     } catch (error) {
       log.error(error);
     }
+  }
+
+  /**通过项目模板API获取项目模板信息：
+   * 1.通过egg.js搭建一套后端系统
+   * 2.通过npm存储项目模板
+   * 3.将项目模板信息存储到mongodb数据库中
+   * 4.通过egg.js获取mongodb中的数据并通过API返回
+   */
+  downloadTemplate() {
+
   }
 }
 

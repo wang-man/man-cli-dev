@@ -30,9 +30,8 @@ class InitCommand extends Command {
     const template = await getTemplate();
     if (!template || template.length === 0) {
       throw new Error('项目模板不存在');    // 就不往后面走了
-    } else {
-      this.template = template;
     }
+    this.template = template;
     const localPath = process.cwd();
     if (!this.isDirEmpty(localPath)) {
       let ifContinue = false;
@@ -127,7 +126,13 @@ class InitCommand extends Command {
             return v;
           }
         }
-      }])
+      }, {
+        type: 'list',
+        name: 'projectTemplate',
+        message: '请选择当前项目模板',
+        choices: this.createTemplateChoice()
+      }
+      ])
       projectInfo = {
         type,
         ...info
@@ -137,6 +142,13 @@ class InitCommand extends Command {
     }
     this.projectInfo = projectInfo;
     return projectInfo;
+  }
+
+  createTemplateChoice() {
+    return this.template.map(item => ({
+      value: item.npmName,
+      name: item.name
+    }))
   }
 
   isDirEmpty(localPath) {

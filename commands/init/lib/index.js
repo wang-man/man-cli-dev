@@ -7,6 +7,7 @@ const semver = require('semver');
 const fse = require('fs-extra');
 const Command = require('@man-cli-dev/command');
 const log = require('@man-cli-dev/log');
+const getTemplate = require('./getTemplate');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
@@ -25,6 +26,13 @@ class InitCommand extends Command {
    * 4.获取项目的基本信息
   */
   async prepare() {
+    // 这一步首先得判断项目是否存在模板，这是创建项目的前提
+    const template = await getTemplate();
+    if (!template || template.length === 0) {
+      throw new Error('项目模板不存在');    // 就不往后面走了
+    } else {
+      this.template = template;
+    }
     const localPath = process.cwd();
     if (!this.isDirEmpty(localPath)) {
       let ifContinue = false;
@@ -62,7 +70,7 @@ class InitCommand extends Command {
   }
 
   async getProjectInfo() {
-    let projectInfo = {};
+    let projectInfo = null;
     const { type } = await inquirer.prompt({
       type: 'list',
       name: 'type',
@@ -127,6 +135,7 @@ class InitCommand extends Command {
     } else if (type === TYPE_COMPONENT) {
 
     }
+    this.projectInfo = projectInfo;
     return projectInfo;
   }
 
@@ -163,7 +172,7 @@ class InitCommand extends Command {
    * 4.通过egg.js获取mongodb中的数据并通过API返回
    */
   downloadTemplate() {
-
+    console
   }
 }
 

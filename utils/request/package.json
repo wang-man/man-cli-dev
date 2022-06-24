@@ -1,11 +1,14 @@
 {
-  "name": "@man-cli-dev/init",
-  "version": "1.0.0",
-  "description": "init command",
+  "name": "@man-cli-dev/request",
+  "version": "1.0.4",
+  "description": "request",
+  "keywords": [
+    "request"
+  ],
   "author": "man.wang <man.wang@symbio.com>",
   "homepage": "https://github.com/wang-man/man-cli-dev#readme",
   "license": "ISC",
-  "main": "./lib/index.js",
+  "main": "lib/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -27,11 +30,6 @@
     "url": "https://github.com/wang-man/man-cli-dev/issues"
   },
   "dependencies": {
-    "@man-cli-dev/command": "file:../../models/command",
-    "@man-cli-dev/log": "file:../../utils/log",
-    "@man-cli-dev/request": "file:../../utils/request",
-    "fs-extra": "^10.1.0",
-    "inquirer": "^8.2.4",
-    "semver": "^7.3.7"
+    "axios": "^0.27.2"
   }
 }

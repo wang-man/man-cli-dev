@@ -39,6 +39,7 @@ async function exec() {
       await pkg.install();
     }
   } else {
+    // 如果指定了targetPath就拿到指定package。这里就不再像上面需要install或update了。
     pkg = new Package({
       targetPath,
       packageName,

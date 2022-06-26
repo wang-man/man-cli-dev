@@ -5,9 +5,12 @@ const fs = require('fs');
 const inquirer = require('inquirer');
 const semver = require('semver');
 const fse = require('fs-extra');
+const userHome = require('user-home');
 const Command = require('@man-cli-dev/command');
+const Package = require('@man-cli-dev/package');
 const log = require('@man-cli-dev/log');
 const getTemplate = require('./getTemplate');
+
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
@@ -163,19 +166,7 @@ class InitCommand extends Command {
    * 2.下载模板
    * 3.安装模板
   */
-  async exec() {
-    try {
-      // 1.准备阶段
-      const projectInfo = await this.prepare();
-      console.log('projectInfo', projectInfo);
-      if (projectInfo) {
-        // 2.下载模板
-        this.downloadTemplate();
-      }
-    } catch (error) {
-      log.error(error);
-    }
-  }
+
 
   /**通过项目模板API获取项目模板信息：
    * 1.通过egg.js搭建一套后端系统
@@ -183,8 +174,40 @@ class InitCommand extends Command {
    * 3.将项目模板信息存储到mongodb数据库中
    * 4.通过egg.js获取mongodb中的数据并通过API返回
    */
-  downloadTemplate() {
-    console
+
+
+  async exec() {
+    try {
+      // 1.准备阶段
+      const projectInfo = await this.prepare();
+      if (projectInfo) {
+        // 2.下载模板
+        await this.downloadTemplate();    // 这里为什么要加await？就是为了downloadTemplate内部出现错误的时候在这里能够捕获到，否则就需要在其内部再次捕获。这是async/await的特性
+      }
+    } catch (error) {
+      log.error(error);
+    }
+  }
+
+  async downloadTemplate() {
+    console.log(this.projectInfo);
+    const { projectTemplate } = this.projectInfo;
+    const templateInfo = this.template.find(item => item.npmName === projectTemplate);  // 从所有模板数组中获取被选择的这个模板
+    const targetPath = path.resolve(userHome, '.man-cli-dev', 'template');
+    const storeDir = path.resolve(userHome, '.man-cli-dev', 'template', 'node_modules');
+    const { npmName, version } = templateInfo;
+    const templatePackage = new Package({
+      targetPath,
+      storeDir,
+      packageName: npmName,
+      packageVersion: version
+    })
+
+    if (!await templatePackage.exists()) {
+      await templatePackage.install();
+    } else {
+      await templatePackage.update();
+    }
   }
 }
 

@@ -58,7 +58,7 @@ class Package {
       return pathExists(this.targetPath);
     }
   }
-  // 安装package。这里的意思是在root代表的目录中安装pkgs中的依赖。this.packageName可能是@man-cli-dev/init
+  // 安装package。这里的意思是在root代表的目录中安装pkgs中的依赖。比如this.packageName 可能是@man-cli-dev/init
   async install() {
     await this.prepare();
     return npminstall({

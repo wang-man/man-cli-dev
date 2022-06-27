@@ -9,6 +9,7 @@ const userHome = require('user-home');
 const Command = require('@man-cli-dev/command');
 const Package = require('@man-cli-dev/package');
 const log = require('@man-cli-dev/log');
+const { spinnerStart, sleep } = require('@man-cli-dev/utils');
 const getTemplate = require('./getTemplate');
 
 
@@ -204,9 +205,17 @@ class InitCommand extends Command {
     })
 
     if (!await templatePackage.exists()) {
+      const spinner = spinnerStart('正在下载模板...');
+      await sleep();  // 测试spinner效果
       await templatePackage.install();
+      spinner.stop(true);
+      log.success('下载完成')
     } else {
+      const spinner = spinnerStart('正在更新模板...');
+      await sleep();  // 测试spinner效果
       await templatePackage.update();
+      spinner.stop(true);
+      log.success('更新完成')
     }
   }
 }

@@ -207,15 +207,25 @@ class InitCommand extends Command {
     if (!await templatePackage.exists()) {
       const spinner = spinnerStart('正在下载模板...');
       await sleep();  // 测试spinner效果
-      await templatePackage.install();
-      spinner.stop(true);
-      log.success('下载完成')
+      try {
+        await templatePackage.install();
+        log.success('下载完成')
+      } catch (error) {
+        throw error;      // 这里仍然需要抛出异常，给到外层调用的exec中捕获
+      } finally {
+        spinner.stop(true);
+      }
     } else {
       const spinner = spinnerStart('正在更新模板...');
       await sleep();  // 测试spinner效果
-      await templatePackage.update();
-      spinner.stop(true);
-      log.success('更新完成')
+      try {
+        await templatePackage.update();
+        log.success('更新完成')
+      } catch (error) {
+        throw error;
+      } finally {
+        spinner.stop(true);
+      }
     }
   }
 }

@@ -5,7 +5,7 @@
   "author": "man.wang <man.wang@symbio.com>",
   "homepage": "https://github.com/wang-man/web-architect#readme",
   "license": "ISC",
-  "main": "lib/core.js",
+  "main": "lib/index.js",
   "bin": {
     "man-cli-dev": "bin/index.js"
   },

@@ -3,7 +3,7 @@
 const axios = require('axios');
 // 请求地址的域名man-cli-dev.com为hosts中配置测试用的，之后应该是实际存在可在互联网访问。
 // 如果在环境变量中存在，则从环境变量中取
-const BASE_URL = process.env.MAN_CLI_DEV_BASE_URL ? process.env.MAN_CLI_DEV_BASE_URL : 'http://man-cli-dev.com:7001';
+const BASE_URL = process.env.MAN_CLI_DEV_BASE_URL ? process.env.MAN_CLI_DEV_BASE_URL : 'http://clitemplateservice-gettemplate.man-cli-dev.1110945173298580.cn-hangzhou.fc.devsapp.net';
 const request = axios.create({
   baseURL: BASE_URL,
   timeout: 5000

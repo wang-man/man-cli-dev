@@ -24,7 +24,7 @@ class InitCommand extends Command {
     this.force = options.force;
   }
   /**
-   * 1.判断当前项目是否为空
+   * 1.判断当前项目（执行命令所在项目，不是tp）是否为空
    * 2.是否启动强制更新
    * 3.选择创建项目或组件
    * 4.获取项目的基本信息
@@ -36,7 +36,7 @@ class InitCommand extends Command {
       throw new Error('项目模板不存在');    // 就不往后面走了
     }
     this.template = template;
-    const localPath = process.cwd();
+    const localPath = process.cwd();  // 当前执行命令所在项目
     if (!this.isDirEmpty(localPath)) {
       let ifContinue = false;
       // 先判断是否带有force参数，如果是force，则不用询问是否创建项目而是直接进行

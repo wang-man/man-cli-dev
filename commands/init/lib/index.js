@@ -32,6 +32,7 @@ class InitCommand extends Command {
   async prepare() {
     // 这一步首先得判断项目是否存在模板，这是创建项目的前提
     const template = await getTemplate();
+    console.log('template', template)
     if (!template || template.length === 0) {
       throw new Error('项目模板不存在');    // 就不往后面走了
     }
@@ -60,13 +61,12 @@ class InitCommand extends Command {
           default: false,
           message: '是否确认清空当前目录中的文件？'
         })
-        console.log('confirmEmpty', confirmEmpty);
 
         if (confirmEmpty) {
           // 清空当前目录
           fse.emptyDirSync(localPath);    // 使用fs-extra中的emptyDirSync清空一个文件夹
         }
-        return confirmEmpty;
+        // return confirmEmpty;
       }
     }
     return await this.getProjectInfo();
@@ -191,12 +191,12 @@ class InitCommand extends Command {
   }
 
   async downloadTemplate() {
-    console.log(this.projectInfo);
+    console.log('this.projectInfo', this.projectInfo);
     const { projectTemplate } = this.projectInfo;
     const templateInfo = this.template.find(item => item.npmName === projectTemplate);  // 从所有模板数组中获取被选择的这个模板
-    const targetPath = path.resolve(userHome, '.man-cli-dev', 'template');
+    const targetPath = path.resolve(userHome, '.man-cli-dev', 'template');  // 模板下载存放目录，和调试参数--targetPath不相干
     const storeDir = path.resolve(userHome, '.man-cli-dev', 'template', 'node_modules');
-    const { npmName, version } = templateInfo;
+    const { npmName, version } = templateInfo;  // 这个version是数据库中的，而不是命令行输入的
     const templatePackage = new Package({
       targetPath,
       storeDir,

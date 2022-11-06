@@ -51,6 +51,7 @@ class Package {
 
   // 判断当前package是否存在，方式是如果不存在storeDir，就判断targetPath是否存在
   async exists() {
+    // console.log('this.storeDir', this.storeDir); // this.storeDir => C:\Users\满\.man-cli-dev\template\node_modules
     if (this.storeDir) {    // 当storeDir存在，说明是缓存模式
       await this.prepare();   // prepare是异步的，因为必须在pathExists前面执行才能拿到正确的packageVersion，所以使用await做保证
       return pathExists(this.cacheFilePath);

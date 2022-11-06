@@ -15,6 +15,8 @@ const getTemplate = require('./getTemplate');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
+const TEMPLATE_TYPE_NORMAL = 'normal';
+const TEMPLATE_TYPE_CUSTOM = 'custom';
 
 class InitCommand extends Command {
   init() {
@@ -32,7 +34,7 @@ class InitCommand extends Command {
   async prepare() {
     // 这一步首先得判断项目是否存在模板，这是创建项目的前提
     const template = await getTemplate();
-    console.log('template', template)
+    // console.log('template', template)
     if (!template || template.length === 0) {
       throw new Error('项目模板不存在');    // 就不往后面走了
     }
@@ -184,6 +186,8 @@ class InitCommand extends Command {
       if (projectInfo) {
         // 2.下载模板
         await this.downloadTemplate();    // 这里为什么要加await？就是为了downloadTemplate内部出现错误的时候在这里能够捕获到，否则就需要在其内部再次捕获。这是async/await的特性
+        // 3.安装模板
+        await this.installTemplate();
       }
     } catch (error) {
       log.error(error);
@@ -191,43 +195,95 @@ class InitCommand extends Command {
   }
 
   async downloadTemplate() {
-    console.log('this.projectInfo', this.projectInfo);
+    // console.log('this.projectInfo', this.projectInfo);
     const { projectTemplate } = this.projectInfo;
     const templateInfo = this.template.find(item => item.npmName === projectTemplate);  // 从所有模板数组中获取被选择的这个模板
-    const targetPath = path.resolve(userHome, '.man-cli-dev', 'template');  // 模板下载存放目录，和调试参数--targetPath不相干
+    const targetPath = path.resolve(userHome, '.man-cli-dev', 'template');  // 模板下载存放目录，注意和调试参数--targetPath不相干
     const storeDir = path.resolve(userHome, '.man-cli-dev', 'template', 'node_modules');
+    this.templateInfo = templateInfo;
     const { npmName, version } = templateInfo;  // 这个version是数据库中的，而不是命令行输入的
-    const templatePackage = new Package({
+    const templateNpm = new Package({
       targetPath,
       storeDir,
       packageName: npmName,
       packageVersion: version
     })
+    this.templateNpm = templateNpm;
 
-    if (!await templatePackage.exists()) {
+    if (!await templateNpm.exists()) {
       const spinner = spinnerStart('正在下载模板...');
       await sleep();  // 测试spinner效果
       try {
-        await templatePackage.install();
-        log.success('下载完成')
+        await templateNpm.install();
       } catch (error) {
         throw error;      // 这里仍然需要抛出异常，给到外层调用的exec中捕获
       } finally {
         spinner.stop(true);
+        if (!await templateNpm.exists()) {
+          log.success('下载完成')
+        }
       }
     } else {
       const spinner = spinnerStart('正在更新模板...');
       await sleep();  // 测试spinner效果
       try {
-        await templatePackage.update();
-        log.success('更新完成')
+        await templateNpm.update();
       } catch (error) {
         throw error;
       } finally {
         spinner.stop(true);
+        if (!await templateNpm.exists()) {
+          log.success('更新完成')
+        }
       }
     }
   }
+
+  async installTemplate() {
+    console.log(this.templateInfo)
+    if (this.templateInfo) {
+      if (!this.templateInfo.type) {
+        this.templateInfo.type = TEMPLATE_TYPE_NORMAL;
+      }
+      if (this.templateInfo.type === TEMPLATE_TYPE_NORMAL) {
+        // 标准安装
+        await this.installNormalTemplate();
+      } else if (this.templateInfo.type === TEMPLATE_TYPE_CUSTOM) {
+        // 自定义安装
+        await this.installCustomTemplate();
+      } else {
+        throw new Error('无法识别项目模板类型')
+      }
+    } else {
+      throw new Error('项目模板信息不存在')
+    }
+  }
+
+
+  async installNormalTemplate() {
+    // console.log('安装标准模板')
+    let spinner = spinnerStart('正在安装模板...');
+    await sleep();  // 测试spinner效果
+    try {
+      // 拷贝模板代码到当前目录  
+      const templatePath = path.resolve(this.templateNpm.cacheFilePath, 'template'); // 已下载模板所在位置
+      // console.log('this.templateNpm.cacheFilePath', this.templateNpm.cacheFilePath)// C:\Users\满\.man-cli-dev\template\node_modules\_man-cli-dev-template-vue3@1.0.1@man-cli-dev-template-vue3
+      const cwd = process.cwd();  // 当前工作目录
+      fse.ensureDirSync(templatePath);   // 判断目录是否存在，否则创建这个目录
+      fse.ensureDirSync(cwd);
+      fse.copySync(templatePath, cwd);  // 将模板目录拷贝至当前工作目录
+    } catch (error) {
+      throw error
+    } finally {
+      spinner.stop(true);
+      log.success('安装成功')
+    }
+  }
+
+  async installCustomTemplate() {
+    console.log('安装自定义模板')
+  }
+
 }
 
 function init(argvs) {

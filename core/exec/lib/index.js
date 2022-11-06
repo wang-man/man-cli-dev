@@ -1,8 +1,8 @@
 'use strict';
 const path = require('path');
-const cp = require('child_process');
 const log = require('@man-cli-dev/log')
 const Package = require('@man-cli-dev/package');
+const { spawn } = require('@man-cli-dev/utils');
 
 const SETTINGS = {
   init: '@imooc-cli/init' // 测试使用imooc-cli，不然npm上不一定已发布@man-cli-dev/init
@@ -78,13 +78,6 @@ async function exec() {
   } else {
     log.error('没有可执行文件');
   }
-}
-// windows上执行的 spawn('cmd', ['/c', 'node', '-e', code], {})
-function spawn(command, args, options) {
-  const win32 = process.platform === 'win32';   // 获取当前系统是否Windows
-  const cmd = win32 ? 'cmd' : command;
-  const cmdArgs = win32 ? ['/c'].concat(command, args) : args;
-  return cp.spawn(cmd, cmdArgs, options || {});
 }
 
 module.exports = exec;

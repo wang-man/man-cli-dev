@@ -9,7 +9,7 @@ const userHome = require('user-home');
 const Command = require('@man-cli-dev/command');
 const Package = require('@man-cli-dev/package');
 const log = require('@man-cli-dev/log');
-const { spinnerStart, sleep } = require('@man-cli-dev/utils');
+const { spinnerStart, sleep, spawnAsync } = require('@man-cli-dev/utils');
 const getTemplate = require('./getTemplate');
 
 
@@ -35,7 +35,7 @@ class InitCommand extends Command {
     // 这一步首先得判断项目是否存在模板，这是创建项目的前提
     const template = await getTemplate();
     // console.log('template', template)
-    if (!template || template.length === 0) {
+    if (!template || !template.length) {
       throw new Error('项目模板不存在');    // 就不往后面走了
     }
     this.template = template;
@@ -219,7 +219,7 @@ class InitCommand extends Command {
         throw error;      // 这里仍然需要抛出异常，给到外层调用的exec中捕获
       } finally {
         spinner.stop(true);
-        if (!await templateNpm.exists()) {
+        if (await templateNpm.exists()) {
           log.success('下载完成')
         }
       }
@@ -232,8 +232,8 @@ class InitCommand extends Command {
         throw error;
       } finally {
         spinner.stop(true);
-        if (!await templateNpm.exists()) {
-          log.success('更新完成')
+        if (await templateNpm.exists()) {
+          log.success('更新成功')
         }
       }
     }
@@ -277,6 +277,32 @@ class InitCommand extends Command {
     } finally {
       spinner.stop(true);
       log.success('安装成功')
+    }
+
+    // 安装依赖
+    const { installCommand, startCommand } = this.templateInfo; // 获取数据库中配置的指令
+    let installResult;
+    if (installCommand) {
+      const commandList = installCommand.split(' '); // 'cnpm install'.split(' ')
+      const cmd = commandList[0];
+      const args = commandList.slice(1);
+      installResult = await spawnAsync(cmd, args, {
+        stdio: 'inherit',
+        cwd: process.cwd()
+      })
+    }
+    if (installResult !== 0) {
+      throw new Error('依赖安装失败')
+    }
+    // 启动项目
+    if (startCommand) {
+      const commandList = startCommand.split(' '); // 'cnpm install'.split(' ')
+      const cmd = commandList[0];
+      const args = commandList.slice(1);
+      await spawnAsync(cmd, args, {
+        stdio: 'inherit',
+        cwd: process.cwd()
+      })
     }
   }
 

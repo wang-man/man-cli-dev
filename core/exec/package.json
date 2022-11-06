@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@man-cli-dev/package": "file:../../models/package",
-    "@man-cli-dev/log": "file:../../utils/log"
+    "@man-cli-dev/log": "file:../../utils/log",
+    "@man-cli-dev/utils": "file:../../utils/utils"
   }
 }

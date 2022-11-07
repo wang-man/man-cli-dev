@@ -32,6 +32,7 @@
     "@man-cli-dev/package": "file:../../models/package",
     "@man-cli-dev/request": "file:../../utils/request",
     "@man-cli-dev/utils": "file:../../utils/utils",
+    "dashify": "^2.0.0",
     "fs-extra": "^10.1.0",
     "inquirer": "^8.2.4",
     "semver": "^7.3.7",

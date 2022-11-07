@@ -6,6 +6,7 @@ const inquirer = require('inquirer');
 const semver = require('semver');
 const fse = require('fs-extra');
 const userHome = require('user-home');
+const dashify = require('dashify');
 const Command = require('@man-cli-dev/command');
 const Package = require('@man-cli-dev/package');
 const log = require('@man-cli-dev/log');
@@ -146,6 +147,9 @@ class InitCommand extends Command {
     } else if (type === TYPE_COMPONENT) {
 
     }
+    if (projectInfo.projectName) {
+      projectInfo.className = dashify(projectInfo.projectName)
+    }
     this.projectInfo = projectInfo;
     return projectInfo;
   }
@@ -195,7 +199,7 @@ class InitCommand extends Command {
   }
 
   async downloadTemplate() {
-    // console.log('this.projectInfo', this.projectInfo);
+    console.log('this.projectInfo', this.projectInfo);
     const { projectTemplate } = this.projectInfo;
     const templateInfo = this.template.find(item => item.npmName === projectTemplate);  // 从所有模板数组中获取被选择的这个模板
     const targetPath = path.resolve(userHome, '.man-cli-dev', 'template');  // 模板下载存放目录，注意和调试参数--targetPath不相干

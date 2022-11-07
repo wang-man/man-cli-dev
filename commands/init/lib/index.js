@@ -259,9 +259,25 @@ class InitCommand extends Command {
     }
   }
 
+  // 抽离出来的执行下载的模板中的指令
+  async execCommand(ommand, msg) {
+    let installResult;
+    if (ommand) {
+      const commandList = ommand.split(' '); // 'cnpm install'.split(' ')
+      const cmd = commandList[0];
+      const args = commandList.slice(1);
+      installResult = await spawnAsync(cmd, args, {
+        stdio: 'inherit',
+        cwd: process.cwd()
+      })
+    }
+    if (installResult !== 0) {
+      throw new Error(msg)
+    }
+  }
 
+  // 安装标准模板
   async installNormalTemplate() {
-    // console.log('安装标准模板')
     let spinner = spinnerStart('正在安装模板...');
     await sleep();  // 测试spinner效果
     try {
@@ -279,31 +295,10 @@ class InitCommand extends Command {
       log.success('安装成功')
     }
 
-    // 安装依赖
+    // 安装依赖+启动项目
     const { installCommand, startCommand } = this.templateInfo; // 获取数据库中配置的指令
-    let installResult;
-    if (installCommand) {
-      const commandList = installCommand.split(' '); // 'cnpm install'.split(' ')
-      const cmd = commandList[0];
-      const args = commandList.slice(1);
-      installResult = await spawnAsync(cmd, args, {
-        stdio: 'inherit',
-        cwd: process.cwd()
-      })
-    }
-    if (installResult !== 0) {
-      throw new Error('依赖安装失败')
-    }
-    // 启动项目
-    if (startCommand) {
-      const commandList = startCommand.split(' '); // 'cnpm install'.split(' ')
-      const cmd = commandList[0];
-      const args = commandList.slice(1);
-      await spawnAsync(cmd, args, {
-        stdio: 'inherit',
-        cwd: process.cwd()
-      })
-    }
+    await this.execCommand(installCommand, '依赖安装失败')
+    await this.execCommand(startCommand, '启动失败')
   }
 
   async installCustomTemplate() {

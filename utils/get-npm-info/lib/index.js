@@ -5,6 +5,7 @@ const axios = require('axios');
 const semver = require('semver');
 const semverCompare = require('semver-compare');
 
+// 从npm官网接口根据包名获取这个包的信息
 function getNpmInfo(pkgName, registry) {
   if (!pkgName) return null;
   const registryUrl = registry || getDefaultRegistry();
@@ -19,7 +20,7 @@ function getNpmInfo(pkgName, registry) {
     return null
   })
 }
-
+// 解析出npm官网上该包的版本号列表
 async function getNpmVersions(pkgName, registry) {
   const data = await getNpmInfo(pkgName, registry);
   if (data) {
@@ -46,7 +47,6 @@ async function getLatestVersion(pkgName, registry) {
   let allVersions = await getNpmVersions(pkgName, registry);
   allVersions = allVersions.sort(semverCompare);
   return allVersions[allVersions.length - 1];
-
 }
 
 function getDefaultRegistry(isOriginal = false) {

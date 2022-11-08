@@ -7,6 +7,8 @@ const semver = require('semver');
 const fse = require('fs-extra');
 const userHome = require('user-home');
 const dashify = require('dashify');
+const ejs = require('ejs');
+const glob = require('glob');
 const Command = require('@man-cli-dev/command');
 const Package = require('@man-cli-dev/package');
 const log = require('@man-cli-dev/log');
@@ -148,8 +150,11 @@ class InitCommand extends Command {
 
     }
     if (projectInfo.projectName) {
+      projectInfo.name = dashify(projectInfo.projectName);  // 增加一个属性
       projectInfo.className = dashify(projectInfo.projectName)
     }
+    projectInfo.version = projectInfo.projectVersion;     // 增加一个属性
+
     this.projectInfo = projectInfo;
     return projectInfo;
   }
@@ -244,7 +249,8 @@ class InitCommand extends Command {
   }
 
   async installTemplate() {
-    console.log(this.templateInfo)
+    console.log('this.templateInfo', this.templateInfo); // templateInfo为从数据库得到的模板信息
+    console.log('this.templateNpm', this.templateNpm); // templateNpm为从npm实际安装的包信息
     if (this.templateInfo) {
       if (!this.templateInfo.type) {
         this.templateInfo.type = TEMPLATE_TYPE_NORMAL;
@@ -280,6 +286,41 @@ class InitCommand extends Command {
     }
   }
 
+  async ejsRender(options) {
+    const dir = process.cwd();
+    const projectInfo = this.projectInfo;
+    return new Promise((resolve, reject) => {
+      // 找到当前工作目录的所有文件
+      glob('**', {
+        cwd: dir,
+        ignore: options.ignore || '',
+        nodir: true
+      }, function (err, files) {
+        if (err) {
+          reject(err)
+        }
+        // 这里为什么要用Promise？其实同步写法也行。
+        Promise.all(files.map(file => {
+          const filePath = path.join(dir, file);   // 拼接出完整路径:D:\learn\慕课实战课\架构师\man-cli-dev-test\babel.config.js
+          // 关键一步：用ejs将项目的所有文件里可能存在的模板语法替换为projectInfo中的信息。
+          return new Promise((resolve1, reject1) => {
+            // console.log('this.projectInfo', this.projectInfo);  // 这得到的this已经发生改变，所以this.projectInfo拿不到，因此在上面将其赋给一个变量
+            ejs.renderFile(filePath, projectInfo, {}, (err, result) => {
+              if (err) {
+                reject1(err)
+              } else {
+                // ejs.renderFile只是拿到数据完成替换，但并不负责写入文件，因此这里还需要将替换后的数据写回文件的这一步
+                fse.writeFileSync(filePath, result);    // 写入文件
+                resolve1(result)
+              }
+            })
+          })
+        }))
+        resolve();
+      })
+    })
+  }
+
   // 安装标准模板
   async installNormalTemplate() {
     let spinner = spinnerStart('正在安装模板...');
@@ -298,6 +339,9 @@ class InitCommand extends Command {
       spinner.stop(true);
       log.success('安装成功')
     }
+    // 将输入的项目名和版本号填充到所下载的模板中
+    const ignore = ['node_modules/**', 'public/**']; // public的index.html文件含有webpack的模板语法干扰ejs语法
+    await this.ejsRender({ ignore })
 
     // 安装依赖+启动项目
     const { installCommand, startCommand } = this.templateInfo; // 获取数据库中配置的指令

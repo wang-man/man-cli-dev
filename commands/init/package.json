@@ -33,7 +33,9 @@
     "@man-cli-dev/request": "file:../../utils/request",
     "@man-cli-dev/utils": "file:../../utils/utils",
     "dashify": "^2.0.0",
+    "ejs": "^3.1.8",
     "fs-extra": "^10.1.0",
+    "glob": "^8.0.3",
     "inquirer": "^8.2.4",
     "semver": "^7.3.7",
     "user-home": "^3.0.0"

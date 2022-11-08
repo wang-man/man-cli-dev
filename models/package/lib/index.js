@@ -79,7 +79,7 @@ class Package {
   async update() {
     // await this.prepare();
     // 1. 获取最新的包版本号
-    const latestVersion = await getLatestVersion(this.packageName);
+    const latestVersion = await getLatestVersion(this.packageName); // 从npm官网获取该包最新版本号
     // 2. 查询最新版本对应的路径是否存在
     const latestFilePath = this.getSpecificCacheFilePath(latestVersion);
     // 3. 如果不存在，则直接安装最新版本
@@ -95,7 +95,9 @@ class Package {
           }
         ]
       })
-      this.packageVersion = latestVersion;  // 不要忘了将版本属性更新
+      this.packageVersion = latestVersion;  // await 以后不要忘了将版本号更新
+    } else {
+      this.packageVersion = latestVersion;  // 即使存在也不能忘了实际安装的项目版本号应为最新
     }
   }
 

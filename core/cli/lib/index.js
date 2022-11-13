@@ -80,7 +80,7 @@ function registryCommand() {
 
 
   program
-    .command('init <projectName>')
+    .command('init [projectName]')
     .option('-f, --force', '是否强制化初始项目')
     .action(exec)
 

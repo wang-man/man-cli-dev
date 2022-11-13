@@ -78,7 +78,16 @@ class InitCommand extends Command {
   }
 
   async getProjectInfo() {
-    let projectInfo = null;
+    let projectInfo = {};
+    let isValidProjectName = false;
+    function isValidName(name) {
+      return /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][[a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(name)
+    }
+    if (isValidName(this.projectName)) {  // 如果初始化命令带有合格的项目名，则这个作为项目名，不再需要输入项目名的选项
+      isValidProjectName = true;
+      projectInfo.projectName = this.projectName;
+    }
+
     const { type } = await inquirer.prompt({
       type: 'list',
       name: 'type',
@@ -95,24 +104,9 @@ class InitCommand extends Command {
         }
       ]
     })
-    if (type === TYPE_PROJECT) {
-      const info = await inquirer.prompt([{
-        type: 'input',
-        name: 'projectName',
-        message: '请输入项目名称',
-        default: '',
-        validate: function (v) {
-          const done = this.async();
-          setTimeout(function () {
-            // 项目名称规则，可是是a,a1,ab,a-b,a_b,不能是a-,a_,ab-等
-            if (! /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][[a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(v)) {
-              done('项目名称不合格');
-              return;
-            }
-            done(null, true);
-          }, 0);
-        }
-      }, {
+
+    const projectPrompt = [
+      {
         type: 'input',
         name: 'projectVersion',
         message: '请输入项目版本号',
@@ -141,8 +135,32 @@ class InitCommand extends Command {
         message: '请选择当前项目模板',
         choices: this.createTemplateChoice()
       }
-      ])
+    ]
+
+    const projectNamePrompt = {
+      type: 'input',
+      name: 'projectName',
+      message: '请输入项目名称',
+      default: '',
+      validate: function (v) {
+        const done = this.async();
+        setTimeout(function () {
+          // 项目名称规则，可是是a,a1,ab,a-b,a_b,不能是a-,a_,ab-等
+          if (!isValidName(v)) {
+            done('项目名称不合格');
+            return;
+          }
+          done(null, true);
+        }, 0);
+      }
+    }
+    // 如果初始化命令中带有合格的项目名，则不需要在输入项目名的选项
+    if (!isValidProjectName) projectPrompt.unshift(projectNamePrompt);
+
+    if (type === TYPE_PROJECT) {
+      const info = await inquirer.prompt(projectPrompt);
       projectInfo = {
+        ...projectInfo,
         type,
         ...info
       }

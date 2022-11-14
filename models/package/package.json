@@ -1,6 +1,6 @@
 {
 	"name": "@man-cli-dev/package",
-	"version": "1.0.7",
+	"version": "1.1.0",
 	"description": "package",
 	"keywords": [
 		"package"
@@ -27,9 +27,9 @@
 		"url": "https://github.com/wang-man/man-cli-dev/issues"
 	},
 	"dependencies": {
-		"@man-cli-dev/format-path": "^1.0.7",
-		"@man-cli-dev/get-npm-info": "^1.0.7",
-		"@man-cli-dev/utils": "^1.0.7",
+		"@man-cli-dev/format-path": "^1.1.0",
+		"@man-cli-dev/get-npm-info": "^1.1.0",
+		"@man-cli-dev/utils": "^1.1.0",
 		"fs-extra": "^10.1.0",
 		"npminstall": "^6.2.0",
 		"path-exists": "4.0.0",

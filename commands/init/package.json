@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/init",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "init command",
   "author": "man.wang <man.wang@symbio.com>",
   "homepage": "https://github.com/wang-man/man-cli-dev#readme",
@@ -24,11 +24,11 @@
     "url": "https://github.com/wang-man/man-cli-dev/issues"
   },
   "dependencies": {
-    "@man-cli-dev/command": "^1.0.7",
-    "@man-cli-dev/log": "^1.0.7",
-    "@man-cli-dev/package": "^1.0.7",
-    "@man-cli-dev/request": "^1.0.7",
-    "@man-cli-dev/utils": "^1.0.7",
+    "@man-cli-dev/command": "^1.1.0",
+    "@man-cli-dev/log": "^1.1.0",
+    "@man-cli-dev/package": "^1.1.0",
+    "@man-cli-dev/request": "^1.1.0",
+    "@man-cli-dev/utils": "^1.1.0",
     "dashify": "^2.0.0",
     "ejs": "^3.1.8",
     "fs-extra": "^10.1.0",

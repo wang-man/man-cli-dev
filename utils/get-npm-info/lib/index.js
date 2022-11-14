@@ -9,7 +9,7 @@ const semverCompare = require('semver-compare');
 function getNpmInfo(pkgName, registry) {
   if (!pkgName) return null;
   const registryUrl = registry || getDefaultRegistry();
-  const npmInfoUrl = urlJoin(registryUrl, pkgName);
+  const npmInfoUrl = urlJoin(registryUrl, pkgName); // 如：https://registry.npmjs.org/man-cli-dev-components
   return axios.get(npmInfoUrl).then(res => {
     if (res.status === 200) {
       return res.data;
@@ -49,7 +49,7 @@ async function getLatestVersion(pkgName, registry) {
   return allVersions[allVersions.length - 1];
 }
 
-function getDefaultRegistry(isOriginal = false) {
+function getDefaultRegistry(isOriginal = true) {    // 这里最好改为true，不用镜像版，否则刚发布的在镜像版中获取不到最新的版本号
   return isOriginal ? 'https://registry.npmjs.org/' : 'https://registry.npmmirror.com/'
 }
 

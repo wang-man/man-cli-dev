@@ -105,13 +105,15 @@ class InitCommand extends Command {
       ]
     })
 
+    const title = type === TYPE_PROJECT ? '项目' : '组件';
+
     this.template = this.template.filter(tem => tem.tags.includes(type)); // 根据所选类型作模板筛选
 
     const projectPrompt = [
       {
         type: 'input',
         name: 'projectVersion',
-        message: '请输入项目版本号',
+        message: `请输入${title}版本号`,
         default: '1.0.0',
         validate: function (v) {
           const done = this.async();
@@ -134,7 +136,7 @@ class InitCommand extends Command {
       }, {
         type: 'list',
         name: 'projectTemplate',
-        message: '请选择当前项目模板',
+        message: `请选择${title}模板`,
         choices: this.createTemplateChoice()
       }
     ]
@@ -142,21 +144,21 @@ class InitCommand extends Command {
     const projectNamePrompt = {
       type: 'input',
       name: 'projectName',
-      message: '请输入项目名称',
+      message: `请输入${title}名称`,
       default: '',
       validate: function (v) {
         const done = this.async();
         setTimeout(function () {
           // 项目名称规则，可是是a,a1,ab,a-b,a_b,不能是a-,a_,ab-等
           if (!isValidName(v)) {
-            done('项目名称不合格');
+            done(`${title}名称不合格`);
             return;
           }
           done(null, true);
         }, 0);
       }
     }
-    // 如果初始化命令中带有合格的项目名，则不需要在输入项目名的选项
+    // 如果初始化命令中带有合格的项目/组件名，则不需要在输入项目名的选项
     if (!isValidProjectName) projectPrompt.unshift(projectNamePrompt);
     if (type === TYPE_PROJECT) {
       const info = await inquirer.prompt(projectPrompt);
@@ -166,8 +168,32 @@ class InitCommand extends Command {
         ...info
       }
     } else if (type === TYPE_COMPONENT) {
-
+      // 如果是选的组件库则加上描述信息
+      const descriptionPrompt = {
+        type: 'input',
+        name: 'description',
+        message: '请输入组件描述',
+        default: '',
+        validate: function (v) {
+          const done = this.async();
+          setTimeout(function () {
+            if (!v) {
+              done('请输入组件描述信息');
+              return;
+            }
+            done(null, true);
+          }, 0);
+        }
+      }
+      projectPrompt.push(descriptionPrompt)
+      const info = await inquirer.prompt(projectPrompt);
+      projectInfo = {
+        ...projectInfo,
+        type,
+        ...info
+      }
     }
+
     if (projectInfo.projectName) {
       projectInfo.name = dashify(projectInfo.projectName);  // 增加一个属性
       projectInfo.className = dashify(projectInfo.projectName)
@@ -268,8 +294,8 @@ class InitCommand extends Command {
   }
 
   async installTemplate() {
-    console.log('this.templateInfo', this.templateInfo); // templateInfo为从数据库得到的模板信息
-    console.log('this.templateNpm', this.templateNpm); // templateNpm为从npm实际安装的包信息
+    // console.log('this.templateInfo', this.templateInfo); // templateInfo为从数据库得到的模板信息
+    // console.log('this.templateNpm', this.templateNpm); // templateNpm为从npm实际安装的包信息
     if (this.templateInfo) {
       if (!this.templateInfo.type) {
         this.templateInfo.type = TEMPLATE_TYPE_NORMAL;
@@ -323,7 +349,7 @@ class InitCommand extends Command {
           const filePath = path.join(dir, file);   // 拼接出完整路径:D:\learn\慕课实战课\架构师\man-cli-dev-test\babel.config.js
           // 关键一步：用ejs将项目的所有文件里可能存在的模板语法替换为projectInfo中的信息。
           return new Promise((resolve1, reject1) => {
-            // console.log('this.projectInfo', this.projectInfo);  // 这得到的this已经发生改变，所以this.projectInfo拿不到，因此在上面将其赋给一个变量
+            // console.log('projectInfo', projectInfo);  // 这得到的this已经发生改变，所以this.projectInfo拿不到，因此在上面将其赋给一个变量
             ejs.renderFile(filePath, projectInfo, {}, (err, result) => {
               if (err) {
                 reject1(err)

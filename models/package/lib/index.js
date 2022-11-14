@@ -80,6 +80,7 @@ class Package {
     // await this.prepare();
     // 1. 获取最新的包版本号
     const latestVersion = await getLatestVersion(this.packageName); // 从npm官网获取该包最新版本号
+    console.log('latestVersion', latestVersion)
     // 2. 查询最新版本对应的路径是否存在
     const latestFilePath = this.getSpecificCacheFilePath(latestVersion);
     // 3. 如果不存在，则直接安装最新版本

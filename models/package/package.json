@@ -27,12 +27,13 @@
 		"url": "https://github.com/wang-man/man-cli-dev/issues"
 	},
 	"dependencies": {
-		"@man-cli-dev/format-path": "file:../../utils/format-path",
-		"@man-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
-		"@man-cli-dev/utils": "file:../../utils/utils",
+		"@man-cli-dev/format-path": "^1.0.6",
+		"@man-cli-dev/get-npm-info": "^1.0.6",
+		"@man-cli-dev/utils": "^1.0.6",
 		"fs-extra": "^10.1.0",
 		"npminstall": "^6.2.0",
 		"path-exists": "4.0.0",
 		"pkg-dir": "5.0.0"
-	}
+	},
+	"gitHead": "829d04b9f3c2bb8fe589034ff94f395b3762eb73"
 }

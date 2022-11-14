@@ -24,11 +24,11 @@
     "url": "https://github.com/wang-man/man-cli-dev/issues"
   },
   "dependencies": {
-    "@man-cli-dev/command": "file:../../models/command",
-    "@man-cli-dev/log": "file:../../utils/log",
-    "@man-cli-dev/package": "file:../../models/package",
-    "@man-cli-dev/request": "file:../../utils/request",
-    "@man-cli-dev/utils": "file:../../utils/utils",
+    "@man-cli-dev/command": "^1.0.6",
+    "@man-cli-dev/log": "^1.0.6",
+    "@man-cli-dev/package": "^1.0.6",
+    "@man-cli-dev/request": "^1.0.6",
+    "@man-cli-dev/utils": "^1.0.6",
     "dashify": "^2.0.0",
     "ejs": "^3.1.8",
     "fs-extra": "^10.1.0",
@@ -36,5 +36,6 @@
     "inquirer": "^8.2.4",
     "semver": "^7.3.7",
     "user-home": "^3.0.0"
-  }
+  },
+  "gitHead": "829d04b9f3c2bb8fe589034ff94f395b3762eb73"
 }

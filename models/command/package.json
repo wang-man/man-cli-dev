@@ -27,8 +27,9 @@
     "url": "https://github.com/wang-man/man-cli-dev/issues"
   },
   "dependencies": {
-    "@man-cli-dev/log": "file:../../utils/log",
+    "@man-cli-dev/log": "^1.0.6",
     "colors": "^1.4.0",
     "semver": "^7.3.7"
-  }
+  },
+  "gitHead": "829d04b9f3c2bb8fe589034ff94f395b3762eb73"
 }

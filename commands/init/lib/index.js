@@ -105,6 +105,8 @@ class InitCommand extends Command {
       ]
     })
 
+    this.template = this.template.filter(tem => tem.tags.includes(type)); // 根据所选类型作模板筛选
+
     const projectPrompt = [
       {
         type: 'input',
@@ -156,7 +158,6 @@ class InitCommand extends Command {
     }
     // 如果初始化命令中带有合格的项目名，则不需要在输入项目名的选项
     if (!isValidProjectName) projectPrompt.unshift(projectNamePrompt);
-
     if (type === TYPE_PROJECT) {
       const info = await inquirer.prompt(projectPrompt);
       projectInfo = {
@@ -288,10 +289,10 @@ class InitCommand extends Command {
   }
 
   // 抽离出来的执行下载的模板中的指令
-  async execCommand(ommand, msg) {
+  async execCommand(command, msg) {
     let installResult;
-    if (ommand) {
-      const commandList = ommand.split(' '); // 'cnpm install'.split(' ')
+    if (command) {
+      const commandList = command.split(' '); // 'cnpm install'.split(' ')
       const cmd = commandList[0];
       const args = commandList.slice(1);
       installResult = await spawnAsync(cmd, args, {
@@ -358,7 +359,8 @@ class InitCommand extends Command {
       log.success('安装成功')
     }
     // 将输入的项目名和版本号填充到所下载的模板中
-    const ignore = ['node_modules/**', 'public/**']; // public的index.html文件含有webpack的模板语法干扰ejs语法
+    const templateIgnore = this.templateInfo.ejsIgnore || [];
+    const ignore = ['node_modules/**', ...templateIgnore]; // public的index.html文件含有webpack的模板语法干扰ejs语法
     await this.ejsRender({ ignore })
 
     // 安装依赖+启动项目

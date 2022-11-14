@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/exec",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "exec",
   "keywords": [
     "exec"
@@ -13,9 +13,6 @@
     "lib": "lib",
     "test": "__tests__"
   },
-  "files": [
-    "lib"
-  ],
   "publishConfig": {
     "access": "public"
   },
@@ -30,8 +27,8 @@
     "url": "https://github.com/wang-man/man-cli-dev/issues"
   },
   "dependencies": {
-    "@man-cli-dev/package": "file:../../models/package",
     "@man-cli-dev/log": "file:../../utils/log",
+    "@man-cli-dev/package": "file:../../models/package",
     "@man-cli-dev/utils": "file:../../utils/utils"
   }
 }

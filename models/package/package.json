@@ -1,6 +1,6 @@
 {
 	"name": "@man-cli-dev/package",
-	"version": "1.0.0",
+	"version": "1.0.5",
 	"description": "package",
 	"keywords": [
 		"package"
@@ -13,9 +13,6 @@
 		"lib": "lib",
 		"test": "__tests__"
 	},
-	"files": [
-		"lib"
-	],
 	"publishConfig": {
 		"access": "public"
 	},

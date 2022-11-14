@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/get-npm-info",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "get npm info",
   "keywords": [
     "npm"
@@ -13,9 +13,6 @@
     "lib": "lib",
     "test": "__tests__"
   },
-  "files": [
-    "lib"
-  ],
   "publishConfig": {
     "access": "public"
   },

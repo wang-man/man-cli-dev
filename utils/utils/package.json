@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/utils",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "我的脚手架",
   "author": "man.wang <man.wang@symbio.com>",
   "homepage": "https://github.com/wang-man/web-architect#readme",
@@ -10,9 +10,6 @@
     "lib": "lib",
     "test": "__tests__"
   },
-  "files": [
-    "lib"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wang-man/web-architect.git"

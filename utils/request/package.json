@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/request",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "request",
   "keywords": [
     "request"
@@ -13,9 +13,6 @@
     "lib": "lib",
     "test": "__tests__"
   },
-  "files": [
-    "lib"
-  ],
   "publishConfig": {
     "access": "public"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/init",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "init command",
   "author": "man.wang <man.wang@symbio.com>",
   "homepage": "https://github.com/wang-man/man-cli-dev#readme",
@@ -10,9 +10,6 @@
     "lib": "lib",
     "test": "__tests__"
   },
-  "files": [
-    "lib"
-  ],
   "publishConfig": {
     "access": "public"
   },

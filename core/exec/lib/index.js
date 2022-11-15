@@ -5,7 +5,7 @@ const Package = require('@man-cli-dev/package');
 const { spawn } = require('@man-cli-dev/utils');
 
 const SETTINGS = {
-  init: '@man-cli-dev/core' // 测试使用imooc-cli，不然npm上不一定已发布@man-cli-dev/init
+  init: '@man-cli-dev/init' // 测试使用imooc-cli，不然npm上不一定已发布@man-cli-dev/init。@man-cli-dev/init为commands/init目录
 }
 const CACHE_DIR = 'dependencies';
 

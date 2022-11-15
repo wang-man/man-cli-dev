@@ -5,7 +5,7 @@ const Package = require('@man-cli-dev/package');
 const { spawn } = require('@man-cli-dev/utils');
 
 const SETTINGS = {
-  init: '@imooc-cli/init' // 测试使用imooc-cli，不然npm上不一定已发布@man-cli-dev/init
+  init: '@man-cli-dev/core' // 测试使用imooc-cli，不然npm上不一定已发布@man-cli-dev/init
 }
 const CACHE_DIR = 'dependencies';
 
@@ -32,7 +32,7 @@ async function exec() {
       packageName,
       packageVersion
     })
-    // 判断呢是否真实存在storeDir或targetPath代表的目录，如果存在，则走更新路线，如果不存在则直接去install
+    // 判断是否真实存在storeDir或targetPath代表的目录，如果存在，则走更新路线，如果不存在则直接去install
     if (await pkg.exists()) {
       await pkg.update();
     } else {

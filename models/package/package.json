@@ -1,6 +1,6 @@
 {
 	"name": "@man-cli-dev/package",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"description": "package",
 	"keywords": [
 		"package"
@@ -28,7 +28,7 @@
 	},
 	"dependencies": {
 		"@man-cli-dev/format-path": "^1.1.0",
-		"@man-cli-dev/get-npm-info": "^1.1.1",
+		"@man-cli-dev/get-npm-info": "^1.1.2",
 		"@man-cli-dev/utils": "^1.1.0",
 		"fs-extra": "^10.1.0",
 		"npminstall": "^6.2.0",

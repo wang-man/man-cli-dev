@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/exec",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "exec",
   "keywords": [
     "exec"
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@man-cli-dev/log": "^1.1.0",
-    "@man-cli-dev/package": "^1.1.1",
+    "@man-cli-dev/package": "^1.1.2",
     "@man-cli-dev/utils": "^1.1.0"
   },
   "gitHead": "71914252c600b47c73878c3e2ca24dc99aa471ab"

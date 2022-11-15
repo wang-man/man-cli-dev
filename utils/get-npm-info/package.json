@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/get-npm-info",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "get npm info",
   "keywords": [
     "npm"

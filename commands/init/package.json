@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/init",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "init command",
   "author": "man.wang <man.wang@symbio.com>",
   "homepage": "https://github.com/wang-man/man-cli-dev#readme",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@man-cli-dev/command": "^1.1.0",
     "@man-cli-dev/log": "^1.1.0",
-    "@man-cli-dev/package": "^1.2.0",
+    "@man-cli-dev/package": "^1.2.1",
     "@man-cli-dev/request": "^1.1.0",
     "@man-cli-dev/utils": "^1.1.0",
     "dashify": "^2.0.0",

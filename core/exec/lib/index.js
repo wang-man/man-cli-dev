@@ -33,19 +33,21 @@ async function exec() {
       packageVersion
     })
     // 判断是否真实存在storeDir或targetPath代表的目录，如果存在，则走更新路线，如果不存在则直接去install
+    // 注意，这里的update、install指的安装脚手架自身的依赖，与models\package\lib\index.js中安装模板相区分开来。
     if (await pkg.exists()) {
       await pkg.update();
     } else {
       await pkg.install();
     }
   } else {
-    // 如果指定了targetPath就拿到指定package。这里就不再像上面需要install或update了。
+    // 如果指定了targetPath就拿到指定package直接执行。这里就不再像上面需要install或update了。
     pkg = new Package({
       targetPath,
       packageName,
       packageVersion
     })
   }
+  // 以下为关键步骤，使用require引入@man-cli-dev/init(即commands/init)的入口文件，放入子线程执行。
   const rootFile = pkg.getRootFilePath();
   if (rootFile) {
     try {
@@ -60,7 +62,8 @@ async function exec() {
       // })
       // args[args.length - 1] = cmd;
       delete args[args.length - 1].parent;    // 适度去除无用的属性
-      const code = `require('${rootFile}')(${JSON.stringify(args)})`;
+      const code = `require('${rootFile}')(${JSON.stringify(args)})`;   // 调试时rootFile就是targetPath指明的commands/init，生产时就是脚手架安装到系统里的@man-cli-dev/init的那个包入口文件
+
       const child = spawn('node', ['-e', code], {
         // shell: true,   // 这里不能带否则出错
         stdio: 'inherit'

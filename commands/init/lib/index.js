@@ -386,7 +386,7 @@ class InitCommand extends Command {
     }
     // 将输入的项目名和版本号填充到所下载的模板中
     const templateIgnore = this.templateInfo.ejsIgnore || [];
-    const ignore = ['node_modules/**', ...templateIgnore]; // public的index.html文件含有webpack的模板语法干扰ejs语法
+    const ignore = ['node_modules/**', ...templateIgnore]; // public的index.html文件含有webpack的模板语法干扰ejs语法。因此需要根据不同模板的配置信息来忽视这些文件。
     await this.ejsRender({ ignore })
 
     // 安装依赖+启动项目

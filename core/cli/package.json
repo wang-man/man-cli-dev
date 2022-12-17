@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/core",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "我的脚手架",
   "author": "man.wang <man.wang@symbio.com>",
   "homepage": "https://github.com/wang-man/web-architect#readme",
@@ -22,7 +22,7 @@
   "dependencies": {
     "@man-cli-dev/exec": "^1.2.2",
     "@man-cli-dev/get-npm-info": "^1.2.1",
-    "@man-cli-dev/init": "^1.2.3",
+    "@man-cli-dev/init": "^1.2.4",
     "@man-cli-dev/log": "^1.1.0",
     "classnames": "^2.3.1",
     "colors": "^1.4.0",

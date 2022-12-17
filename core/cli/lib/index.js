@@ -69,7 +69,7 @@ async function prepare() {
   await checkGlobalUpdate();
 }
 
-function registryCommand() {
+async function registryCommand() {
   // 下面定义的option属于全局的，每个命令都能携带
   program
     .name(Object.keys(pkg.bin)[0])
@@ -119,10 +119,7 @@ function registryCommand() {
 async function core() {
   try {
     await prepare();
-    registryCommand();
-    process.on('unhandledRejection', error => {
-      console.log('我帮你处理了', error.message);
-    });
+    await registryCommand();
   } catch (error) {
     log.error(error.message);
     if (process.env.LOG_LEVEL === 'verbose') {

@@ -32,8 +32,7 @@
     "npmlog": "^6.0.2",
     "path-exists": "4.0.0",
     "root-check": "1.0.0",
-    "semver": "^7.3.7",
-    "user-home": "^3.0.0"
+    "semver": "^7.3.7"
   },
   "gitHead": "9911f455656904235aa14ba4ed713214b6f91849"
 }

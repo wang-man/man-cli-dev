@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
 const semver = require('semver');
-const userHome = require('user-home');
+const { homedir } = require('os');
 const pathExists = require('path-exists').sync;
 const colors = require('colors');
 const { Command } = require('commander');
@@ -24,14 +24,14 @@ function checkRoot() {
 }
 
 function checkUserHome() {
-  if (!userHome || !pathExists(userHome)) {
+  if (!homedir() || !pathExists(homedir())) {
     throw new Error('当前登录用户主目录不存在')
   }
 }
 
 function checkEnv() {
   const dotenv = require('dotenv');
-  const dotenvPath = path.resolve(userHome, '.env');  // 拼装一个假设存在于用户主目录的.env文件
+  const dotenvPath = path.resolve(homedir(), '.env');  // 拼装一个假设存在于用户主目录的.env文件
   if (pathExists(dotenvPath)) {   // 如果该.env文件存在，则配置到process.env
     dotenv.config({
       path: dotenvPath
@@ -42,12 +42,12 @@ function checkEnv() {
 
 function createDefaultConfig() {
   const cliConfig = {
-    home: userHome
+    home: homedir()
   }
   if (process.env.CLI_HOME) {   // 来自上面的dotenv.config设置
-    cliConfig['cliHome'] = path.join(userHome, process.env.CLI_HOME)
+    cliConfig['cliHome'] = path.join(homedir(), process.env.CLI_HOME)
   } else {
-    cliConfig['cliHome'] = path.join(userHome, constant.DEFAULT_CLI_HOME)
+    cliConfig['cliHome'] = path.join(homedir(), constant.DEFAULT_CLI_HOME)
   }
   process.env.CLI_HOME_PATH = cliConfig.cliHome;
 }

@@ -1,6 +1,6 @@
 {
   "name": "@man-cli-dev/init",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "init command",
   "author": "man.wang <man.wang@symbio.com>",
   "homepage": "https://github.com/wang-man/man-cli-dev#readme",

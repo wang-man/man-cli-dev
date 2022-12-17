@@ -120,6 +120,9 @@ async function core() {
   try {
     await prepare();
     registryCommand();
+    process.on('unhandledRejection', error => {
+      console.log('我帮你处理了', error.message);
+    });
   } catch (error) {
     log.error(error.message);
     if (process.env.LOG_LEVEL === 'verbose') {

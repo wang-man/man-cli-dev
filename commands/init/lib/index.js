@@ -5,7 +5,7 @@ const fs = require('fs');
 const inquirer = require('inquirer');
 const semver = require('semver');
 const fse = require('fs-extra');
-const userHome = require('user-home');
+const { homedir } = require('os');
 const dashify = require('dashify');
 const ejs = require('ejs');
 const glob = require('glob');
@@ -252,8 +252,8 @@ class InitCommand extends Command {
     console.log('this.projectInfo', this.projectInfo);
     const { projectTemplate } = this.projectInfo;
     const templateInfo = this.template.find(item => item.npmName === projectTemplate);  // 从所有模板数组中获取被选择的这个模板
-    const targetPath = path.resolve(userHome, '.man-cli-dev', 'template');  // 模板下载存放目录，注意和调试参数--targetPath不相干
-    const storeDir = path.resolve(userHome, '.man-cli-dev', 'template', 'node_modules');
+    const targetPath = path.resolve(homedir(), '.man-cli-dev', 'template');  // 模板下载存放目录，注意和调试参数--targetPath不相干
+    const storeDir = path.resolve(homedir(), '.man-cli-dev', 'template', 'node_modules');
     this.templateInfo = templateInfo;
     const { npmName, version } = templateInfo;  // 这个version是数据库中的，而不是命令行输入的
     const templateNpm = new Package({
